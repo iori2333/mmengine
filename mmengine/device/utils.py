@@ -34,6 +34,12 @@ try:
 except Exception:
     IS_MUSA_AVAILABLE = False
 
+try:
+    import torch.xpu
+    IS_XPU_AVAILABLE = True
+except Exception:
+    IS_XPU_AVAILABLE = False
+
 
 def get_max_cuda_memory(device: Optional[torch.device] = None) -> int:
     """Returns the maximum GPU memory occupied by tensors in megabytes (MB) for
@@ -120,11 +126,17 @@ def is_npu_support_full_precision() -> bool:
     ) >= version_of_support_full_precision
 
 
+def is_xpu_available() -> bool:
+    return IS_XPU_AVAILABLE
+
+
 DEVICE = 'cpu'
 if is_npu_available():
     DEVICE = 'npu'
 elif is_cuda_available():
     DEVICE = 'cuda'
+elif is_xpu_available():
+    DEVICE = 'xpu'
 elif is_mlu_available():
     DEVICE = 'mlu'
 elif is_mps_available():
@@ -139,6 +151,6 @@ def get_device() -> str:
     """Returns the currently existing device type.
 
     Returns:
-        str: cuda | npu | mlu | mps | musa | cpu.
+        str: cuda | npu | xpu | mlu | mps | musa | cpu.
     """
     return DEVICE

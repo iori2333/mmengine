@@ -142,6 +142,9 @@ def autocast(device_type: Optional[str] = None,
                     enabled=enabled, dtype=dtype, cache_enabled=cache_enabled):
                 yield
                 return
+        elif device_type == 'xpu':
+            if dtype is None:
+                dtype = torch.bfloat16
         else:
             # Device like MPS does not support fp16 training or testing.
             # If an inappropriate device is set and fp16 is enabled, an error
