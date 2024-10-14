@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os.path as osp
 import subprocess
+from typing import cast
 
 
 def is_installed(package: str) -> bool:
@@ -69,11 +70,11 @@ def get_installed_path(package: str) -> str:
         else:
             raise e
 
-    possible_path = osp.join(pkg.location, package)
+    possible_path = osp.join(cast(str, pkg.location), package)
     if osp.exists(possible_path):
         return possible_path
     else:
-        return osp.join(pkg.location, package2module(package))
+        return osp.join(cast(str, pkg.location), package2module(package))
 
 
 def package2module(package: str):
